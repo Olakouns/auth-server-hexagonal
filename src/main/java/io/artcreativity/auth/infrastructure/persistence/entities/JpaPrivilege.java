@@ -1,28 +1,43 @@
-package io.artcreativity.auth.domain.model.entities;
+package io.artcreativity.auth.infrastructure.persistence.entities;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.artcreativity.auth.domain.model.entities.TypePrivilege;
+import io.artcreativity.auth.domain.model.entities.TypeRole;
+import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.Collection;
 
-
-public class Privilege extends BaseEntity {
-
+@NoArgsConstructor
+@Entity
+@Table(name = "privileges")
+@SQLDelete(sql =
+        "UPDATE privileges " +
+                "SET deleted = true " +
+                "WHERE id = ?")
+@Where(clause = "deleted = false")
+public class JpaPrivilege extends DateAudit {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Enumerated(EnumType.STRING)
     private TypePrivilege name;
     private String description;
     private String category;
     private TypeRole typeRole;
 
-    private Collection<Role> roles;
+    @ManyToMany(mappedBy = "privileges")
+    @JsonIgnore
+    private Collection<JpaRole> roles;
 
-    public Privilege() {
-        super();
-    }
-
-    public Privilege(TypePrivilege name) {
+    public JpaPrivilege(TypePrivilege name) {
         super();
         this.name = name;
     }
 
-    public Privilege(String category, TypePrivilege name, String description, TypeRole typeRole) {
+    public JpaPrivilege(String category, TypePrivilege name, String description, TypeRole typeRole) {
         super();
         this.category = category;
         this.name = name;
@@ -62,11 +77,11 @@ public class Privilege extends BaseEntity {
         this.category = category;
     }
 
-    public Collection<Role> getRoles() {
+    public Collection<JpaRole> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Collection<JpaRole> roles) {
         this.roles = roles;
     }
 

@@ -2,6 +2,7 @@ package io.artcreativity.auth.domain.model.entities;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.UUID;
 
 
 public class Role implements Serializable {
@@ -16,6 +17,8 @@ public class Role implements Serializable {
     private TypeRole role;
     private Set<Privilege> privileges;
     private User createdBy;
+
+    private UUID companyId;
 
     public Role() {
         super();
@@ -65,5 +68,13 @@ public class Role implements Serializable {
 
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public UUID getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(UUID companyId) {
+        this.companyId = companyId;
     }
 }
