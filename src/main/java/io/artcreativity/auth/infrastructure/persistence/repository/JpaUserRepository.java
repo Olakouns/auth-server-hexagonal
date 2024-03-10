@@ -22,4 +22,6 @@ public interface JpaUserRepository extends JpaRepository<JpaUser, UUID> {
     Page<JpaUser> findByRoles_idIn(int[] idRole, Pageable page);
 
     Page<JpaUser> findByNameLike(String keyword1, Pageable page);
+
+    Optional<JpaUser> findByUsernameOrEmail(String username, String email);
 }

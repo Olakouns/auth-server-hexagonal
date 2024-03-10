@@ -1,96 +1,65 @@
 package io.artcreativity.auth.domain.service;
 
+import io.artcreativity.auth.common.JwtAuthenticationResponse;
+import io.artcreativity.auth.domain.exceptions.RequestNotAcceptableException;
+import io.artcreativity.auth.domain.exceptions.ResourceNotFoundException;
 import io.artcreativity.auth.domain.model.entities.*;
 import io.artcreativity.auth.domain.port.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.List;
 
 public class DomainAuthService implements AuthService {
 
     private final UserPort userPort;
-    private final UserCompanyPort userCompanyPort;
-    private final WorkerPort workerPort;
+    private final ProfilePort profilePort;
     private final RolePort rolePort;
+    private final SecurityPort securityPort;
 
     private final PasswordEncoderPort passwordEncoderPort;
 
-    public DomainAuthService(UserPort userPort, UserCompanyPort userCompanyPort, WorkerPort workerPort, RolePort rolePort, PasswordEncoderPort passwordEncoderPort) {
+    public DomainAuthService(UserPort userPort, ProfilePort profilePort, RolePort rolePort, SecurityPort securityPort, PasswordEncoderPort passwordEncoderPort) {
         this.userPort = userPort;
-        this.userCompanyPort = userCompanyPort;
-        this.workerPort = workerPort;
+        this.profilePort = profilePort;
         this.rolePort = rolePort;
+        this.securityPort = securityPort;
         this.passwordEncoderPort = passwordEncoderPort;
     }
 
     @Override
-    public Map<String, String> createUser(User user, UUID companyId) {
-        Role roleCompany = new ArrayList<>(user.getRoles()).get(0);
-        User save;
-        UserCompany userCompany;
-        if (userPort.existsByEmail(user.getEmail())) {
-            if (userPort.existsByEmailAndActive(user.getEmail(), false)) {
-                save = userPort.findByEmail(user.getEmail()).get();
-                if (userCompanyPort.existsByUserAndCompanyId(save, companyId)) {
-                    userCompany = userCompanyPort.findByUserAndCompanyId(save, companyId);
-                } else {
-                    userCompany = new UserCompany();
-                }
-            } else {
-                return new HashMap<>() {
-                    {
-                        put("status", "false");
-                        put("message", "Un utilisateur utilisant l'email " + user.getEmail() + " existe deja");
-                    }
-                };
-            }
-        } else {
-            save = user;
-            userCompany = new UserCompany();
+    public Profile createUser(Profile profile) {
+        if (profilePort.existsByEmail(profile.getEmail())) {
+            System.out.println("ICI exist deja");
+            throw new RequestNotAcceptableException("Il y a déjà un compte associé à cette adresse e-mail");
         }
 
-        save.setPassword(passwordEncoderPort.encode(user.getPassword()));
-        save.setRoles(new ArrayList<>(rolePort.findByRole(TypeRole.ROLE_SIMPLE)));
-        save.setActive(true);
-        save.setStatus(StatusUser.ACTIVE);
-        save = userPort.save(save);
-        Worker profile;
-        profile = workerPort.findByUser(save).orElse(new Worker());
-        profile.setUser(save);
-        profile.setEmail(save.getEmail());
-        profile.setUsername(save.getEmail());
-        profile.setFirstName(user.getName());
-        profile = workerPort.save(profile);
+        User user = profile.getUser();
+        List<Role> roles = new ArrayList<>();
+        roles.add(rolePort.findFirstByRole(TypeRole.ROLE_SIMPLE));
+        user.setRoles(roles);
+        user.setPassword(passwordEncoderPort.encode(user.getPassword()));
+        user.setActive(true);
+        user.setStatus(StatusUser.ACTIVE);
+        user.setDefaultPassword(false);
+        user.setName(profile.getLastName() + " " + profile.getFirstName());
+        System.out.println("ICI");
+        user = userPort.save(user);
 
-        userCompany.setUser(save);
-        userCompany.setCompanyId(companyId);
-        userCompany.setRole(roleCompany);
-        userCompanyPort.save(userCompany);
-
-        Worker finalProfile = profile;
-        return new HashMap<>() {
-            {
-                put("status", "true");
-                put("message", finalProfile.getId().toString());
-            }
-        };
+        profile.setUser(user);
+        return profilePort.save(profile);
     }
 
     @Override
-    public String getJwtToken(String username, String password) {
-        return null;
+    public JwtAuthenticationResponse getTokens(User user) {
+        return securityPort.getTokens(user.getUsername());
     }
 
     @Override
-    public String getJwtRefreshToken(String username, String password) {
-        return null;
-    }
-
-    @Override
-    public String getRefreshToken(String accessToken) {
-        return null;
+    public JwtAuthenticationResponse loginUser(String username, String password) {
+        User user = userPort.findByUsernameOrEmail(username).orElseThrow(
+                () -> new ResourceNotFoundException("User", "username", username)
+        );
+        return securityPort.loginUser(user, username, password);
     }
 
     @Override

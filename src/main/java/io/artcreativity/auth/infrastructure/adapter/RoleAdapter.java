@@ -3,6 +3,7 @@ package io.artcreativity.auth.infrastructure.adapter;
 import io.artcreativity.auth.domain.model.entities.Role;
 import io.artcreativity.auth.domain.model.entities.TypeRole;
 import io.artcreativity.auth.domain.port.RolePort;
+import io.artcreativity.auth.infrastructure.persistence.entities.JpaRole;
 import io.artcreativity.auth.infrastructure.persistence.mapper.JpaRoleMapper;
 import io.artcreativity.auth.infrastructure.persistence.repository.JpaRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,12 @@ public class RoleAdapter implements RolePort {
     @Override
     public List<Role> findByRole(TypeRole typeRole) {
         return jpaRoleRepository.findByRole(typeRole).stream().map(jpaRoleMapper::toRole).toList();
+    }
+
+    @Override
+    public Role findFirstByRole(TypeRole typeRole) {
+        JpaRole jpaRole = jpaRoleRepository.findFirstByRole(typeRole);
+        Role role = jpaRoleMapper.toRole(jpaRole);
+        return role;
     }
 }

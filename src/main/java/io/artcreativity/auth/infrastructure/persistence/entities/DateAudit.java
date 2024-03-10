@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,7 +24,6 @@ import java.time.Instant;
 )
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EntityListeners(AuditingEntityListener.class)
-
 public abstract class DateAudit implements Serializable {
     /**
      *
@@ -32,13 +32,13 @@ public abstract class DateAudit implements Serializable {
 
     @JsonIgnore
     @ColumnDefault(value = "false")
-    private boolean deleted;
+    protected boolean deleted;
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Instant createdAt;
+    protected Instant createdAt;
     @UpdateTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Instant updatedAt;
+    protected Instant updatedAt;
     @Transient
     private boolean canBeDeleted = true;
     @CreatedBy
@@ -52,7 +52,7 @@ public abstract class DateAudit implements Serializable {
     @JsonIgnore
     private JpaUser modifiedBy;
     @Column(unique = true)
-    private String slug;
+    protected String slug;
 
     /**
      *

@@ -18,8 +18,6 @@ public class Role implements Serializable {
     private Set<Privilege> privileges;
     private User createdBy;
 
-    private UUID companyId;
-
     public Role() {
         super();
     }
@@ -69,12 +67,5 @@ public class Role implements Serializable {
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
-
-    public UUID getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(UUID companyId) {
-        this.companyId = companyId;
-    }
+    
 }

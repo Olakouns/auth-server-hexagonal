@@ -11,6 +11,8 @@ public interface UserPort {
     boolean existsByEmailAndActive(String email, boolean active);
 
     Optional<User> findByEmail(String email);
+    Optional<User> findByUsername(String email);
+    Optional<User> findByUsernameOrEmail(String email);
 
     User save(User save);
 }

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfig {
 
     @Bean
-    public DomainAuthService domainAuthService(final UserPort userPort, final UserCompanyPort userCompanyPort, final WorkerPort workerPort, final RolePort rolePort, final PasswordEncoderPort passwordEncoderPort) {
-        return new DomainAuthService(userPort, userCompanyPort, workerPort, rolePort, passwordEncoderPort);
+    public DomainAuthService domainAuthService(final UserPort userPort, final ProfilePort workerPort, final RolePort rolePort, final SecurityPort securityPort, final PasswordEncoderPort passwordEncoderPort) {
+        return new DomainAuthService(userPort, workerPort, rolePort, securityPort, passwordEncoderPort);
     }
 }

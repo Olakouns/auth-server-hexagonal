@@ -1,18 +1,18 @@
 package io.artcreativity.auth.domain.service;
 
+import io.artcreativity.auth.common.JwtAuthenticationResponse;
+import io.artcreativity.auth.domain.model.entities.Profile;
 import io.artcreativity.auth.domain.model.entities.User;
 
 import java.util.Map;
 import java.util.UUID;
 
 public interface AuthService {
-    Map<String, String> createUser(User user, UUID companyId);
+    Profile createUser(Profile profile);
 
-    String getJwtToken(String username, String password);
+    JwtAuthenticationResponse getTokens(User user);
 
-    String getJwtRefreshToken(String username, String password);
-
-    String getRefreshToken(String accessToken);
+    JwtAuthenticationResponse loginUser(String username, String password);
 
     boolean sendEmailForgotPassword(String email);
 

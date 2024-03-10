@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface JpaRoleRepository extends JpaRepository<JpaRole, Integer> {
     List<JpaRole> findByRole(TypeRole type);
+
+    JpaRole findFirstByRole(TypeRole typeRole);
 }

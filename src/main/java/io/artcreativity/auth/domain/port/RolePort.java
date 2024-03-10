@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface RolePort {
     List<Role> findByRole(TypeRole typeRole);
+
+    Role findFirstByRole(TypeRole typeRole);
 }

@@ -1,5 +1,7 @@
 package io.artcreativity.auth.infrastructure.adapter;
 
+import io.artcreativity.auth.common.JwtAuthenticationResponse;
+import io.artcreativity.auth.domain.model.entities.User;
 import io.artcreativity.auth.domain.port.PasswordEncoderPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

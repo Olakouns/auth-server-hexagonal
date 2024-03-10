@@ -32,6 +32,16 @@ public class UserAdapter implements UserPort {
     }
 
     @Override
+    public Optional<User> findByUsername(String email) {
+        return jpaUserRepository.findByUsername(email).map(jpaUserMapper::toUser);
+    }
+
+    @Override
+    public Optional<User> findByUsernameOrEmail(String email) {
+        return jpaUserRepository.findByUsernameOrEmail(email, email).map(jpaUserMapper::toUser);
+    }
+
+    @Override
     public User save(User save) {
         return jpaUserMapper.toUser(jpaUserRepository.save(jpaUserMapper.toJpaUser(save)));
     }

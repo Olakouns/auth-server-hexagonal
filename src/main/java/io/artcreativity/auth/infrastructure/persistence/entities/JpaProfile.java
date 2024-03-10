@@ -1,5 +1,6 @@
 package io.artcreativity.auth.infrastructure.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,14 +11,15 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 
 import java.sql.Types;
+import java.util.Date;
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class JpaWorker extends DateAudit {
+public class JpaProfile extends DateAudit {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -31,4 +33,10 @@ public class JpaWorker extends DateAudit {
     private String email;
     private String username;
     private String firstName;
+    private String lastName;
+    private String phone;
+    private String gender;
+    private String country;
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    private Date birthday;
 }
