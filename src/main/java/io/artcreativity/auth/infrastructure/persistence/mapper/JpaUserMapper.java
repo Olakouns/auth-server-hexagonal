@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {JpaRoleMapper.class, JpaPrivilegeMapper.class}, componentModel = "spring")
 public interface JpaUserMapper {
-    JpaUserMapper INSTANCE = Mappers.getMapper(JpaUserMapper.class);
+//    JpaUserMapper INSTANCE = Mappers.getMapper(JpaUserMapper.class);
     User toUser(JpaUser jpaUser);
     JpaUser toJpaUser(User user);
 }

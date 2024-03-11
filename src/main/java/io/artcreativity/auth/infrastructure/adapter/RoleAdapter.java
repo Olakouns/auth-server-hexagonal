@@ -25,8 +25,6 @@ public class RoleAdapter implements RolePort {
 
     @Override
     public Role findFirstByRole(TypeRole typeRole) {
-        JpaRole jpaRole = jpaRoleRepository.findFirstByRole(typeRole);
-        Role role = jpaRoleMapper.toRole(jpaRole);
-        return role;
+        return jpaRoleMapper.toRole(jpaRoleRepository.findFirstByRole(typeRole));
     }
 }
