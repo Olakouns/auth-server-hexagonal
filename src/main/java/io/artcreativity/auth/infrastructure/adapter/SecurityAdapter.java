@@ -40,6 +40,8 @@ public class SecurityAdapter implements SecurityPort {
     public JwtAuthenticationResponse loginUser(User user, String username, String password) {
         JpaUser jpaUser = jpaUserMapper.toJpaUser(user);
 
+        System.out.println(username);
+        System.out.println(password);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );

@@ -28,7 +28,9 @@ public class AuthController {
     @PostMapping("/register-and-get-token")
     @Operation(summary = "Create a new user and get token", description = "Create user and automatically get token.")
     public JwtAuthenticationResponse createUserAndGetToken(@RequestBody Profile profile) {
+        String username = profile.getUser().getUsername();
+        String password = profile.getUser().getPassword();
         authService.createUser(profile);
-        return authService.loginUser(profile.getUser().getUsername(), profile.getUser().getPassword());
+        return authService.loginUser(username, password);
     }
 }

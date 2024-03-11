@@ -119,6 +119,7 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers(
                                         mvcMatcherBuilder.pattern("/api/auth/login"),
+                                        mvcMatcherBuilder.pattern("/api/auth/register-and-get-token"),
                                         mvcMatcherBuilder.pattern("/api/auth/register"),
                                         mvcMatcherBuilder.pattern("/api/auth/passwordforgot"),
                                         mvcMatcherBuilder.pattern("/api/auth/changeddefaultpassword"),

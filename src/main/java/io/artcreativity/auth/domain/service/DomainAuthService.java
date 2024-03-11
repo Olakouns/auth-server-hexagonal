@@ -29,7 +29,6 @@ public class DomainAuthService implements AuthService {
     @Override
     public Profile createUser(Profile profile) {
         if (profilePort.existsByEmail(profile.getEmail())) {
-            System.out.println("ICI exist deja");
             throw new RequestNotAcceptableException("Il y a déjà un compte associé à cette adresse e-mail");
         }
 
@@ -42,7 +41,6 @@ public class DomainAuthService implements AuthService {
         user.setStatus(StatusUser.ACTIVE);
         user.setDefaultPassword(false);
         user.setName(profile.getLastName() + " " + profile.getFirstName());
-        System.out.println("ICI");
         user = userPort.save(user);
 
         profile.setUser(user);
